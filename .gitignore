@@ -1,0 +1,6 @@
+bin/
+secret/
+
+# ignore gomodules sum file
+go.sum
+
