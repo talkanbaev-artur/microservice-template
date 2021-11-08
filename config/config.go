@@ -14,8 +14,8 @@ type AppConfig struct {
 	IsDevelopmentConfig bool `yaml:"is_dev"` //Development environment indicator - implemented stupidly but works
 	// Http server configuration block. Has basic host and port params with default timeout values
 	ServerConfig struct {
-		Host    string   `yaml:"host"`
-		Port    string   `yaml:"port"`
+		Host    string
+		Port    string
 		Timeout struct { // Timeout struct, which includes default timeout values
 			Read  int
 			Write int
