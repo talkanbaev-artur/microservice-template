@@ -1,0 +1,18 @@
+# Developement configuration
+# Highly specific - enter your own values
+---
+is_dev: true # if true than config would not ask env variables for credentials
+server:
+  host: 0.0.0.0
+  port: 8000
+  timeout:
+    write: 20
+    read: 15
+database:
+  driver: postgres
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  database: auc_auth_dev
+  connection_limit: 10
