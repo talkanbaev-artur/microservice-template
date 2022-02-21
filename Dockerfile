@@ -1,29 +1,24 @@
 #use small build environment
 FROM golang:alpine as build 
 
-#setup workdir
 WORKDIR /app
 
 #get dependencies
 COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
+RUN go mod download && go mod tidy
 
-#copy the project
-COPY *.go ./
-
-#build
-RUN go build -o /main
+#copy and build the project
+COPY . ./
+RUN go build -o /main cmd/main.go
 
 #Use deploy env
 FROM alpine:latest
 
 WORKDIR /
 
-#Copy result
 COPY --from=build /main /main
 
-#Expose port 8000 - change in case of using other ports
-EXPOSE 8000
+#optionally use --expose for dynamic config
+EXPOSE 8000 
 
 ENTRYPOINT [ "/main" ]

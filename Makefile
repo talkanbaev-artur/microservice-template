@@ -1,5 +1,7 @@
-IMAGE_NAME = golang-test #docker image name
-IMAGE_VERSION = 0.1 #this value tags the docker image
+#docker image name
+IMAGE_NAME = golang-test
+#this value tags the docker image
+IMAGE_VERSION = 0.1
 
 all: build #default command build the project
 
@@ -13,6 +15,9 @@ build:
 run:
 	go run main.go
 
+#Run docker image on host network
+drun: image
+	docker run --name $(IMAGE_NAME) --network=host -d $(IMAGE_NAME):latest
 # PRODUCTION BUILDS
 
 #create image and tag it as latest
