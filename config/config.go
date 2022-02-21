@@ -22,7 +22,7 @@ type AppConfig struct {
 		}
 	} `yaml:"server"`
 	// Database configuration block - used for DSN construction
-	DatabaseConfig struct {
+	SQLDatabaseConfig struct {
 		Driver          string //
 		Host            string
 		Port            string
@@ -30,7 +30,14 @@ type AppConfig struct {
 		Password        string // dev only password yaml field - in production it is read from env
 		Database        string
 		ConnectionLimit int `yaml:"connection_limit"`
-	} `yaml:"database"`
+	} `yaml:"sqldatabase"`
+	// Configuration for redis database
+	RedisConfig struct {
+		Address  string
+		Port     int
+		DB       int
+		Password string
+	} `yaml:"redis"`
 }
 
 var ErrNoConfigFile = errors.New("config file does not exist")
@@ -67,20 +74,19 @@ func ReadConfig() (*AppConfig, error) {
 	}
 
 	if !config.IsDevelopmentConfig {
-		switch config.DatabaseConfig.Driver {
+		switch config.SQLDatabaseConfig.Driver {
 		case "postgres":
 			password, exist_pass := os.LookupEnv("POSTGRESQL_USERNAME")
 			username, exist_user := os.LookupEnv("POSTGRESQL_PASSWORD")
 			if !(exist_pass && exist_user) {
 				return nil, ErrNoCredentials
 			}
-			config.DatabaseConfig.User = username
-			config.DatabaseConfig.Password = password
+			config.SQLDatabaseConfig.User = username
+			config.SQLDatabaseConfig.Password = password
 		// if you need another database - just specify another case
 		default:
 			return nil, ErrUnknownDriver
 		}
-
 	}
 
 	return config, nil
